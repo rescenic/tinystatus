@@ -11,6 +11,7 @@ from jinja2 import Template
 from datetime import datetime
 import json
 import logging
+import platform
 
 # Load environment variables
 load_dotenv()
@@ -27,20 +28,26 @@ HISTORY_TEMPLATE_FILE = os.getenv('HISTORY_TEMPLATE_FILE', 'history.html.theme')
 STATUS_HISTORY_FILE = os.getenv('STATUS_HISTORY_FILE', 'history.json')
 HTML_OUTPUT_DIRECTORY = os.getenv('HTML_OUTPUT_DIRECTORY', os.getcwd())
 
+# Platform Idendifier
+PLATFORM = platform.system().lower()
 
 # Service check functions
-async def check_http(url, expected_code):
+async def check_http(url, expected_code, selfsigned):
     async with aiohttp.ClientSession() as session:
         try:
-            async with session.get(url) as response:
+            async with session.get(url, ssl=not selfsigned) as response:
                 return response.status == expected_code
-        except:
+        except Exception as err:
+            print("error with ", url, err)
             return False
 
 
 async def check_ping(host):
     try:
-        result = subprocess.run(['ping', '-c', '1', '-W', '2', host], capture_output=True, text=True)
+        if PLATFORM == 'windows':
+            result = subprocess.run(['ping', '-n', '1', '-w', '2000', host], capture_output=True, text=True)
+        else:
+            result = subprocess.run(['ping', '-c', '1', '-W', '2', host], capture_output=True, text=True)
         return result.returncode == 0
     except:
         return False
@@ -60,8 +67,14 @@ async def run_checks(checks):
     background_tasks = {}
     async with asyncio.TaskGroup() as tg:
         for check in checks:
+            if check['type'] == 'http':
+                if 'ssc' in check:
+                    selfcert = check['ssc']
+                else:
+                    selfcert = False
+
             task = tg.create_task(
-                check_http(check['host'], check['expected_code']) if check['type'] == 'http' else
+                check_http(check['host'], check['expected_code'], selfcert) if check['type'] == 'http' else
                 check_ping(check['host']) if check['type'] == 'ping' else
                 check_port(check['host'], check['port']) if check['type'] == 'port' else None,
                 name=check['name']

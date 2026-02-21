@@ -9,9 +9,11 @@
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
     <link rel="manifest" href="assets/site.webmanifest">
     <link rel="mask-icon" href="assets/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="description" content="TinyStatus is a simple, customizable status page generator that allows you to monitor the status of various services and display them on a clean, responsive web page.">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400..900&display=swap');
         :root {
             --bg-color: #f4f4f4;
             --text-color: #333;
@@ -20,20 +22,25 @@
             --card-shadow: rgba(0,0,0,0.1);
             --footer-color: #7f8c8d;
             --link-color: #3498db;
+            --secondary-bg-color: #fff;
+            --status-down-color: #e74c3c;
+            --status-up-color: #166534
         }
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #1a1a1a;
+                --bg-color: #18181b;
                 --text-color: #e0e0e0;
                 --heading-color: #b0b0b0;
-                --card-bg: #2a2a2a;
-                --card-shadow: rgba(255,255,255,0.1);
+                --card-bg: #27272a;
+                --card-shadow: rgba(9,9,11,0.4);
                 --footer-color: #888;
                 --link-color: #5dade2;
+                --secondary-bg-color: #27272a;
+                --status-down-color: #FF9185;
+                --status-up-color: #27ae60;
             }
-        }
         body {
-            font-family: sans-serif;
+            font-family: "Golos Text", sans-serif;
             line-height: 1.6;
             color: var(--text-color);
             max-width: 1200px;
@@ -69,8 +76,8 @@
             display: flex;
             justify-content: space-between;
         }
-        .status-up { color: #27ae60; }
-        .status-down { color: #e74c3c; }
+        .status-up { color: var(--status-up-color); }
+        .status-down { color: var(--status-down-color); }
         .footer {
             text-align: center;
             font-size: .9em;

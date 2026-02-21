@@ -9,7 +9,7 @@ Check out an online demo https://status.harry.id
 
 | Light Mode | Dark Mode | 
 |-|-|
-| ![Light](https://github.com/user-attachments/assets/28227221-d1e1-442e-89a4-2a0a09615514) | ![Dark](https://github.com/user-attachments/assets/8bbfc364-319a-417d-898d-3e0807b782bf) |
+| ![Light](https://github.com/user-attachments/assets/3ea7b55e-397f-4f7c-8189-64b74a03594b) | ![Dark](https://github.com/user-attachments/assets/92072f9e-1031-4f07-8392-1111df57453a) |
 
 
 ## Features
@@ -60,26 +60,33 @@ Check out an online demo https://status.harry.id
 2. Edit the `checks.yaml` file to add or modify the services you want to monitor.
    Example:
    ```yaml
-   - name: GitHub Home 
-     type: http
-     host: https://github.com
-     url: https://github.com # (optional: URL review/clickable)
-     expected_code: 200
-     
+    - title: 'Group 1'
+      checks:
+        - name: GitHub Home
+          type: http
+          host: https://github.com
+          url: https://docs.github.com/en
+          expected_code: 200
 
-   - name: Google DNS
-     type: ping
-     host: 8.8.8.8
+        - name: Google Public DNS
+          type: ping
+          host: 8.8.8.8
 
-   - name: Database
-     type: port
-     host: db.example.com
-     port: 5432
+        - name: Dummy MySQL Database
+          type: port
+          host: db.example.com
+          port: 3306
+
+       - name: Home Server with Self-Signed Certs
+          type: http
+          host: https://homeserver.local
+          ssc: True
+          expected_code: 200
    ```
 
-4. (Optional) Customize the `incidents.md` file to add any known incidents or maintenance schedules.
+3. (Optional) Customize the `incidents.md` file to add any known incidents or maintenance schedules.
 
-5. (Optional) Modify the `index.html.theme` and `history.html.theme` files to customize the look and feel of your status pages.
+4. (Optional) Modify the `index.html.theme` and `history.html.theme` files to customize the look and feel of your status pages.
 
 ## Usage
 
@@ -88,7 +95,7 @@ Check out an online demo https://status.harry.id
    python tinystatus.py
    ```
 
-2. The script will generate two files:
+2. The script will generate three files:
    - `index.html`: The main status page
    - `history.html`: The status history page
    - `history.json`: The status history and timestamp data
@@ -100,7 +107,7 @@ Check out an online demo https://status.harry.id
      ```
    - On Windows, you can use the Task Scheduler to run the script at startup.
 
-4. Serve the generated HTML files using your preferred web server (e.g., Apache, Nginx, or a simple Python HTTP server for testing).
+4. Serve the generated HTML files using your preferred web server (e.g., Apache, NGINX, or a simple Python HTTP server for testing).
 
 ## Using Docker
 
@@ -124,7 +131,7 @@ TinyStatus porting are available in:
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+[Contributions](https://github.com/harsxv/tinystatus/contribute) are, of course, most welcome!
 
 ## License
 
